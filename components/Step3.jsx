@@ -6,17 +6,14 @@ import { Logo } from "./Logo";
 import { DateInput } from "./DateInput";
 import { UploadImg } from "./UploadImg";
 
-export const Step3 = ({ handleNextStep, handleBackStep }) => {
-  const [birthDate, setBirthDate] = useState("");
-  const [profile, setProfile] = useState(null);
-
+export const Step3 = ({ handleNextStep, handleBackStep, form, setForm }) => {
   const isDateBirthValid = () => {
-    if (birthDate === "") return "Please select a date.";
+    if (form.birthDate === "") return "Please select a date.";
     if (!/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/.test(birthDate))
       return "Please select a date.";
   };
   const isProfileValid = () => {
-    if (profile === "") return "Image cannot be blank";
+    if (form.profile === "") return "Image cannot be blank";
     if (!/^[689]\d{7}$/.test(profile)) return "Image cannot be blank";
   };
   const handleImageChange = (e) => {
@@ -36,13 +33,13 @@ export const Step3 = ({ handleNextStep, handleBackStep }) => {
         </div>
         <div>
           <DateInput
-            value={birthDate}
+            value={form.birthDate}
             label={"Date of birth"}
             required={true}
-            onChange={(e) => setBirthDate(e.target.value)}
+            onChange={(e) => setForm({ ...form, birthDate: e.target.value })}
           />
           <UploadImg
-            value={profile}
+            value={form.profile}
             label={"Profile Image"}
             required={true}
             onChange={handleImageChange}

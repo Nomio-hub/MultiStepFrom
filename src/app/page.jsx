@@ -6,7 +6,19 @@ import { Step3 } from "../../components/Step3";
 import { Step4 } from "../../components/Step4";
 
 const page = () => {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(2);
+  const [form, setForm] = useState({
+    firstname: "",
+    lastname: "",
+    username: "",
+    email: "",
+    phoneNumber: "",
+    password: "",
+    confirmPassword: "",
+    birthDate: "",
+    profile: "",
+  });
+
   const steps = [Step1, Step2, Step3, Step4];
 
   const handleNextStep = () => {
@@ -23,6 +35,8 @@ const page = () => {
       <StepForm
         handleNextStep={handleNextStep}
         handleBackStep={handleBackStep}
+        form={form}
+        setForm={setForm}
       />
     </div>
   );
