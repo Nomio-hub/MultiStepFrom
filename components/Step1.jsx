@@ -3,25 +3,29 @@ import { TextField } from "./TextField";
 import { Buttons } from "./Buttons";
 import { Logo } from "./Logo";
 
-export const Step1 = ({ handleNextStep, form, setForm }) => {
-  const isFirstNameValid = () => {
-    if (form.firstname === "") return "First name cannot be empty...";
-    if (!/^[A-Za-z-]+$/.test(form.firstname))
+export const Step1 = ({ handleNextStep, form, setForm, errors, setErrors }) => {
+  const isFirstNameValid = (value) => {
+    if (value === "") return "First name cannot be empty...";
+    if (!/^[A-Za-z-]+$/.test(value))
       return "First name cannot contain special characters or numbers.";
   };
-  const isLastNameValid = () => {
-    if (form.lastname === "") return "First name cannot be empty...";
-    if (!/^[A-Za-z-]+$/.test(form.lastname))
+  const isLastNameValid = (value) => {
+    if (value === "") return "First name cannot be empty...";
+    if (!/^[A-Za-z-]+$/.test(value))
       return "Last name cannot contain special characters or numbers.";
   };
-  const isUserNameValid = () => {
-    if (form.username === "") return "First name cannot be empty...";
-    if (!/[a-zA-Z0-9]{3,16}$/.test(form.username))
+  const isUserNameValid = (value) => {
+    if (value === "") return "First name cannot be empty...";
+    if (!/[a-zA-Z0-9]{3,16}$/.test(value))
       return "This username is already taken. Please choose another one.";
   };
 
   const isHavingError = () => {
-    return isFirstNameValid() || isLastNameValid() || isUserNameValid();
+    return (
+      isFirstNameValid(form.firstname) ||
+      isLastNameValid(form.firstname) ||
+      isUserNameValid(form.username)
+    );
   };
   return (
     <div className="w-120 min-h-163.75 shadow-xl rounded-lg p-8 text-black flex flex-col justify-between">
@@ -37,9 +41,13 @@ export const Step1 = ({ handleNextStep, form, setForm }) => {
         <TextField
           value={form.firstname}
           onChange={(e) => {
+            setErrors({
+              ...errors,
+              firstname: isFirstNameValid(e.target.value),
+            });
             setForm({ ...form, firstname: e.target.value });
           }}
-          error={isFirstNameValid()}
+          error={errors.firstname}
           required={true}
           label="First name"
           placeholder="Nomin..."
@@ -47,9 +55,13 @@ export const Step1 = ({ handleNextStep, form, setForm }) => {
         <TextField
           value={form.lastname}
           onChange={(e) => {
+            setErrors({
+              ...errors,
+              lastname: isLastNameValid(e.target.value),
+            });
             setForm({ ...form, lastname: e.target.value });
           }}
-          error={isLastNameValid()}
+          error={errors.lastname}
           required={true}
           label="Last name"
           placeholder="Erdene..."
@@ -57,9 +69,13 @@ export const Step1 = ({ handleNextStep, form, setForm }) => {
         <TextField
           value={form.username}
           onChange={(e) => {
+            setErrors({
+              ...errors,
+              username: isUserNameValid(e.target.value),
+            });
             setForm({ ...form, username: e.target.value });
           }}
-          error={isUserNameValid()}
+          error={errors.username}
           required={true}
           label="Username"
           placeholder="Nimo..."

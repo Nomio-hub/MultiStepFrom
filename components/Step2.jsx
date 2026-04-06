@@ -5,34 +5,42 @@ import { Logo2 } from "./Logo2";
 import { Logo } from "./Logo";
 import { Buttons } from "./Buttons";
 
-export const Step2 = ({ handleNextStep, handleBackStep, form, setForm }) => {
-  const isEmailNameValid = () => {
-    if (form.email === "") return "Email cannot be empty...";
-    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email))
+export const Step2 = ({
+  handleNextStep,
+  handleBackStep,
+  form,
+  setForm,
+  errors,
+  setErrors,
+}) => {
+  const isEmailNameValid = (value) => {
+    if (value === "") return "Email cannot be empty...";
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value))
       return "Please provide a valid email address.";
   };
-  const isPhoneNumberValid = () => {
-    if (form.phoneNumber === "") return "Phone number cannot be empty...";
-    if (!/^[689]\d{7}$/.test(phoneNumber))
+  const isPhoneNumberValid = (value) => {
+    if (value === "") return "Phone number cannot be empty...";
+    if (!/^[689]\d{7}$/.test(value))
       return "Please enter a valid phone number.";
   };
-  const isPasswordValid = () => {
-    if (form.password === "") return "Password cannot be empty...";
-    if (
-      /!^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
-        password,
-      )
-    )
+  const isPasswordValid = (value) => {
+    if (value === "") return "Password cannot be empty...";
+    if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(value))
       return "Password must include letters and numbers.";
   };
-  const isConfirmPasswordValid = () => {
-    if (form.confirmPassword === "") return "Password cannot be empty...";
-    if (
-      /!^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
-        confirmPassword,
-      )
-    )
+  const isConfirmPasswordValid = (value) => {
+    if (value === "") return "Confirm password cannot be empty...";
+    if (value !== form.password) {
       return "Passwords do not match. Please try again.";
+    }
+  };
+  const isHavingError = () => {
+    return (
+      isEmailNameValid(form.email) ||
+      isPhoneNumberValid(form.phoneNumber) ||
+      isPasswordValid(form.password) ||
+      isConfirmPasswordValid(form.confirmPassword)
+    );
   };
   return (
     <div className="w-120 min-h-163.75 shadow-xl rounded-lg p-8 text-black flex flex-col justify-between">
@@ -48,9 +56,13 @@ export const Step2 = ({ handleNextStep, handleBackStep, form, setForm }) => {
         <TextField
           value={form.email}
           onChange={(e) => {
+            setErrors({
+              ...errors,
+              email: isEmailNameValid(e.target.value),
+            });
             setForm({ ...form, email: e.target.value });
           }}
-          error={isEmailNameValid()}
+          error={errors.email}
           required={true}
           label="Email"
           placeholder="nominjourney@gmail.com"
@@ -58,9 +70,13 @@ export const Step2 = ({ handleNextStep, handleBackStep, form, setForm }) => {
         <TextField
           value={form.phoneNumber}
           onChange={(e) => {
+            setErrors({
+              ...errors,
+              phoneNumber: isPhoneNumberValid(e.target.value),
+            });
             setForm({ ...form, phoneNumber: e.target.value });
           }}
-          error={isPhoneNumberValid()}
+          error={errors.phoneNumber}
           required={true}
           label="Phone number"
           placeholder="xxxxxxxx"
@@ -68,9 +84,13 @@ export const Step2 = ({ handleNextStep, handleBackStep, form, setForm }) => {
         <TextField
           value={form.password}
           onChange={(e) => {
+            setErrors({
+              ...errors,
+              password: isPasswordValid(e.target.value),
+            });
             setForm({ ...form, password: e.target.value });
           }}
-          error={isPasswordValid()}
+          error={errors.password}
           required={true}
           label="Password"
           placeholder=""
@@ -78,9 +98,13 @@ export const Step2 = ({ handleNextStep, handleBackStep, form, setForm }) => {
         <TextField
           value={form.confirmPassword}
           onChange={(e) => {
+            setErrors({
+              ...errors,
+              confirmPassword: isConfirmPasswordValid(e.target.value),
+            });
             setForm({ ...form, confirmPassword: e.target.value });
           }}
-          error={isConfirmPasswordValid()}
+          error={errors.confirmPassword}
           required={true}
           label="Confirm password"
           placeholder=""
@@ -96,6 +120,7 @@ export const Step2 = ({ handleNextStep, handleBackStep, form, setForm }) => {
           btnName={"Continue 2/3"}
           btnIcon={<Logo />}
           handleNextStep={handleNextStep}
+          disabled={isHavingError()}
         />
       </div>
     </div>

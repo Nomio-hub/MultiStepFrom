@@ -6,21 +6,30 @@ import { Logo } from "./Logo";
 import { DateInput } from "./DateInput";
 import { UploadImg } from "./UploadImg";
 
-export const Step3 = ({ handleNextStep, handleBackStep, form, setForm }) => {
-  const isDateBirthValid = () => {
-    if (form.birthDate === "") return "Please select a date.";
-    if (!/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/.test(birthDate))
+export const Step3 = ({
+  handleNextStep,
+  handleBackStep,
+  form,
+  setForm,
+  errors,
+  setErrors,
+}) => {
+  const isDateBirthValid = (value) => {
+    if (value === "") return "Please select a date.";
+    if (!/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/.test(value))
       return "Please select a date.";
   };
-  const isProfileValid = () => {
-    if (form.profile === "") return "Image cannot be blank";
-    if (!/^[689]\d{7}$/.test(profile)) return "Image cannot be blank";
+  const isProfileValid = (value) => {
+    if (value === "") return "Image cannot be blank";
+    if (!/^[689]\d{7}$/.test(value)) return "Image cannot be blank";
   };
-  const handleImageChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setProfile(URL.createObjectURL(e.target.files[0]));
-    }
+  const isHavingError = () => {
+    return (
+      isDateBirthValid(form.isDateBirthValid) ||
+      isProfileValid(form.isProfileValid)
+    );
   };
+
   return (
     <div className="w-120 min-h-163.75 shadow-xl rounded-lg p-8 text-black flex flex-col justify-between">
       <div>
@@ -36,13 +45,30 @@ export const Step3 = ({ handleNextStep, handleBackStep, form, setForm }) => {
             value={form.birthDate}
             label={"Date of birth"}
             required={true}
-            onChange={(e) => setForm({ ...form, birthDate: e.target.value })}
+            onChange={(e) => {
+              setErrors({
+                ...errors,
+                birthDate: isDateBirthValid(e.target.value),
+              });
+              setForm({ ...form, birthDate: e.target.value });
+            }}
           />
           <UploadImg
             value={form.profile}
             label={"Profile Image"}
             required={true}
-            onChange={handleImageChange}
+            error={errors.profile}
+            onChange={(e) => {
+              const imageValue = URL.createObjectURL(e.target.files[0]);
+              setForm({ ...form, profile: imageValue });
+              setErrors({
+                ...errors,
+                profile: isProfileValid(e.target.value),
+              });
+            }}
+            onCancel={() => {
+              setForm({ ...form, profile: "" });
+            }}
           />
         </div>
       </div>
@@ -52,6 +78,7 @@ export const Step3 = ({ handleNextStep, handleBackStep, form, setForm }) => {
           btnName={"Continue 3/3"}
           btnIcon={<Logo />}
           handleNextStep={handleNextStep}
+          disabled={isHavingError()}
         />
       </div>
     </div>

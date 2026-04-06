@@ -19,6 +19,17 @@ const page = () => {
     profile: "",
   });
 
+  const [errors, setErrors] = useState({
+    firstname: "",
+    lastname: "",
+    username: "",
+    email: "",
+    phoneNumber: "",
+    password: "",
+    confirmPassword: "",
+    birthDate: "",
+    profile: "",
+  });
   const steps = [Step1, Step2, Step3, Step4];
 
   const handleNextStep = () => {
@@ -37,6 +48,8 @@ const page = () => {
         handleBackStep={handleBackStep}
         form={form}
         setForm={setForm}
+        errors={errors}
+        setErrors={setErrors}
       />
     </div>
   );
