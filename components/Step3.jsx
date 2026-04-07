@@ -19,15 +19,11 @@ export const Step3 = ({
     if (!/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/.test(value))
       return "Please select a date.";
   };
-  const isProfileValid = (value) => {
-    if (value === "") return "Image cannot be blank";
-    if (!/^[689]\d{7}$/.test(value)) return "Image cannot be blank";
+  const isProfileValid = (imageValue) => {
+    if (!imageValue) return "Image cannot be blank";
   };
   const isHavingError = () => {
-    return (
-      isDateBirthValid(form.isDateBirthValid) ||
-      isProfileValid(form.isProfileValid)
-    );
+    return isDateBirthValid(form.birthDate) || isProfileValid(form.profile);
   };
 
   return (
@@ -37,7 +33,7 @@ export const Step3 = ({
           <img className="h-15 w-15 object-contain" src="icon.png" />
           <p className=" font-semibold text-2xl">Join Us! 😎</p>
           <p className="text-gray-400 font-400 text-[18px]">
-            Please provide all current information accuratel.
+            Please provide all current information accurately.
           </p>
         </div>
         <div>
