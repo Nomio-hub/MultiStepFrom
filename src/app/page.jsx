@@ -6,7 +6,7 @@ import { Step3 } from "../../components/Step3";
 import { Step4 } from "../../components/Step4";
 
 const page = () => {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(1);
   const [form, setForm] = useState(null);
   const [errors, setErrors] = useState({
     firstname: "",

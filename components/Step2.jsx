@@ -4,6 +4,7 @@ import { BackBtn } from "./BackBtn";
 import { Logo2 } from "./Logo2";
 import { Logo } from "./Logo";
 import { Buttons } from "./Buttons";
+import { Password } from "./Password";
 
 export const Step2 = ({
   handleNextStep,
@@ -81,7 +82,7 @@ export const Step2 = ({
           label="Phone number"
           placeholder="xxxxxxxx"
         />
-        <TextField
+        <Password
           value={form.password}
           onChange={(e) => {
             setErrors({
@@ -93,9 +94,8 @@ export const Step2 = ({
           error={errors.password}
           required={true}
           label="Password"
-          placeholder=""
         />
-        <TextField
+        <Password
           value={form.confirmPassword}
           onChange={(e) => {
             setErrors({
@@ -107,7 +107,6 @@ export const Step2 = ({
           error={errors.confirmPassword}
           required={true}
           label="Confirm password"
-          placeholder=""
         />
       </div>
       <div className="flex gap-2 w-full">
